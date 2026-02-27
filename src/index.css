@@ -1,0 +1,39 @@
+:root {
+  --pink-light: #ffe4f0;
+  --pink: #ff7eb3;
+  --pink-dark: #e0559a;
+  --purple-light: #e8d5f5;
+  --purple: #b388d9;
+  --purple-dark: #8a5cbf;
+  --white: #ffffff;
+  --text-dark: #4a2c5e;
+  --text-light: #7a5a8e;
+  --gold: #ffd700;
+  --gold-light: #fff4cc;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  font-family: 'Fredoka', sans-serif;
+  background: linear-gradient(180deg, #e8d5f5 0%, #ffe4f0 50%, #fff4e6 100%);
+  min-height: 100vh;
+  color: var(--text-dark);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}

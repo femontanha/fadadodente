@@ -1,0 +1,282 @@
+.progresso {
+  min-height: 100vh;
+  padding: 1.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Header */
+.progresso-header {
+  width: 100%;
+  max-width: 500px;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: none;
+  border: none;
+  color: var(--purple-dark);
+  font-family: 'Fredoka', sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0.5rem 0.75rem;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+  margin-bottom: 0.75rem;
+}
+
+.back-btn:hover {
+  background: rgba(138, 92, 191, 0.1);
+}
+
+.progresso-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--purple-dark);
+  margin-bottom: 0.25rem;
+}
+
+.progresso-subtitle {
+  font-size: 1rem;
+  color: var(--text-light);
+  font-weight: 400;
+}
+
+/* Calendar */
+.calendar-container {
+  width: 100%;
+  max-width: 500px;
+  background: var(--white);
+  border-radius: 20px;
+  padding: 1.25rem;
+  box-shadow: 0 4px 20px rgba(138, 92, 191, 0.12);
+  margin-bottom: 1.5rem;
+}
+
+.calendar-month-label {
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--purple-dark);
+  margin-bottom: 1rem;
+}
+
+.calendar-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  margin-bottom: 0.5rem;
+}
+
+.weekday-label {
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-light);
+  padding: 0.25rem 0;
+}
+
+.calendar-week {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  margin-bottom: 4px;
+}
+
+/* Day cell */
+.calendar-day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: 0.4rem 0.2rem;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  background: var(--purple-light);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: 'Fredoka', sans-serif;
+  min-height: 52px;
+}
+
+.calendar-day:hover:not(:disabled) {
+  transform: scale(1.05);
+  box-shadow: 0 2px 8px rgba(138, 92, 191, 0.2);
+}
+
+.calendar-day.is-today {
+  border-color: var(--purple-dark);
+  background: rgba(179, 136, 217, 0.25);
+  box-shadow: 0 0 0 2px rgba(138, 92, 191, 0.15);
+}
+
+.calendar-day.out-of-range {
+  background: #f3f0f5;
+  opacity: 0.4;
+  cursor: default;
+}
+
+.calendar-day.partial {
+  background: var(--gold-light);
+}
+
+.calendar-day.complete {
+  background: linear-gradient(135deg, #d4edda 0%, #b7e4c7 100%);
+}
+
+.day-number {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.day-dots {
+  display: flex;
+  gap: 3px;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #d4c5e2;
+  transition: background 0.2s ease;
+}
+
+.dot-checked {
+  background: var(--purple-dark);
+}
+
+/* Day detail panel */
+.day-detail {
+  width: 100%;
+  max-width: 500px;
+  background: var(--white);
+  border-radius: 20px;
+  padding: 1.25rem;
+  box-shadow: 0 4px 20px rgba(138, 92, 191, 0.12);
+  margin-bottom: 1.5rem;
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.day-detail-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--purple-dark);
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.slots-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.slot-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  border: 2px solid var(--purple-light);
+  border-radius: 16px;
+  background: var(--white);
+  font-family: 'Fredoka', sans-serif;
+  font-size: 1rem;
+}
+
+.slot-item.slot-readonly {
+  cursor: default;
+}
+
+.slot-item.slot-checked {
+  border-color: #6bcb77;
+  background: linear-gradient(135deg, #eafbec 0%, #d4edda 100%);
+}
+
+.slot-icon {
+  font-size: 1.4rem;
+}
+
+.slot-label {
+  flex: 1;
+  text-align: left;
+  font-weight: 500;
+  color: var(--text-dark);
+}
+
+.slot-check {
+  font-size: 1.3rem;
+}
+
+/* Legend */
+.legend {
+  display: flex;
+  gap: 1.25rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: 0.5rem 0 1.5rem;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  color: var(--text-light);
+}
+
+.legend-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 4px;
+}
+
+.legend-dot-empty {
+  background: var(--purple-light);
+}
+
+.legend-dot-partial {
+  background: var(--gold-light);
+  border: 1px solid #e6cc00;
+}
+
+.legend-dot-complete {
+  background: linear-gradient(135deg, #d4edda 0%, #b7e4c7 100%);
+  border: 1px solid #6bcb77;
+}
+
+/* Responsive */
+@media (min-width: 768px) {
+  .calendar-day {
+    min-height: 64px;
+    padding: 0.5rem 0.3rem;
+  }
+
+  .dot {
+    width: 8px;
+    height: 8px;
+  }
+
+  .progresso-title {
+    font-size: 2.2rem;
+  }
+}
