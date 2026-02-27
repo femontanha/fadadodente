@@ -2,28 +2,34 @@ import { useState } from 'react'
 import { supabase } from './supabase'
 import './Login.css'
 
-const FIXED_EMAIL = import.meta.env.VITE_APP_EMAIL
-const FIXED_PASSWORD = import.meta.env.VITE_APP_PASSWORD
-
 function Login() {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
 
-  const handleLogin = async () => {
+  const handleLogin = async (e) => {
+    e.preventDefault()
     setLoading(true)
     setError(null)
 
+    if (!email || !password) {
+      setError('Preencha email e senha')
+      setLoading(false)
+      return
+    }
+
     // Tenta fazer login
     let { error: signInError } = await supabase.auth.signInWithPassword({
-      email: FIXED_EMAIL,
-      password: FIXED_PASSWORD,
+      email,
+      password,
     })
 
     // Se o usuário não existe ainda, cria a conta automaticamente
     if (signInError?.message?.includes('Invalid login credentials')) {
       const { error: signUpError } = await supabase.auth.signUp({
-        email: FIXED_EMAIL,
-        password: FIXED_PASSWORD,
+        email,
+        password,
       })
 
       if (signUpError) {
@@ -34,8 +40,8 @@ function Login() {
 
       // Tenta login novamente após criar
       const { error: retryError } = await supabase.auth.signInWithPassword({
-        email: FIXED_EMAIL,
-        password: FIXED_PASSWORD,
+        email,
+        password,
       })
 
       if (retryError) {
@@ -58,7 +64,7 @@ function Login() {
         <div className="login-fairy">🧚‍♀️</div>
         <h1 className="login-title">Fada do Dente</h1>
         <p className="login-subtitle">
-          Toque no botão para entrar e acompanhar suas escovações ✨
+          Entre para acompanhar suas escovações ✨
         </p>
 
         <div className="login-tooth-decoration">
@@ -67,9 +73,28 @@ function Login() {
           <span className="line"></span>
         </div>
 
-        <button className="btn-entrar" onClick={handleLogin} disabled={loading}>
-          {loading ? '⏳ Entrando...' : '🦷 Entrar'}
-        </button>
+        <form className="login-form" onSubmit={handleLogin}>
+          <input
+            type="email"
+            className="login-input"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            autoComplete="email"
+          />
+          <input
+            type="password"
+            className="login-input"
+            placeholder="Senha"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            autoComplete="current-password"
+          />
+
+          <button className="btn-entrar" type="submit" disabled={loading}>
+            {loading ? '⏳ Entrando...' : '🦷 Entrar'}
+          </button>
+        </form>
 
         {error && <p className="login-error">{error}</p>}
 

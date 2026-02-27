@@ -56,7 +56,7 @@ function App() {
     <div className="app">
       <div className="fairy-icon">🧚‍♀️</div>
       <h1 className="title">Fada do Dente</h1>
-      <p className="subtitle">Cuide do seu sorriso ✨</p>
+      <p className="subtitle">Olá Maitê ✨</p>
 
       <div className="tooth-decoration">
         <span className="line"></span>

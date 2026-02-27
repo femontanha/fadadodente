@@ -15,18 +15,18 @@ const MONTHS = [
   'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
 ]
 
-function generateDays(startDate, weeks) {
+function generateDays(startDate) {
   const days = []
   const start = new Date(startDate)
-  const dayOfWeek = start.getDay()
-  start.setDate(start.getDate() - dayOfWeek)
+  start.setHours(0, 0, 0, 0)
 
-  const totalDays = weeks * 7
-  for (let i = 0; i < totalDays; i++) {
+  // 28 dias a partir de hoje
+  for (let i = 0; i < 28; i++) {
     const date = new Date(start)
     date.setDate(start.getDate() + i)
     days.push(date)
   }
+
   return days
 }
 
@@ -36,7 +36,7 @@ function formatDateKey(date) {
 
 function MeuProgresso({ userId, onBack }) {
   const today = new Date()
-  const days = generateDays(today, 4)
+  const days = generateDays(today)
 
   const { checkedSlots, loading } = useProgresso(userId)
 
@@ -58,24 +58,28 @@ function MeuProgresso({ userId, onBack }) {
     ? `${MONTHS[firstDay.getMonth()]} ${firstDay.getFullYear()}`
     : `${MONTHS[firstDay.getMonth()]} - ${MONTHS[lastDay.getMonth()]} ${lastDay.getFullYear()}`
 
-  // Split days into weeks
+  // Count how many of the 28 days are fully complete (3/3 slots)
+  const completedDays = days.filter(date => {
+    const dateKey = formatDateKey(date)
+    return getCompletionCount(dateKey) === 3
+  }).length
+  const remaining = 28 - completedDays
+  const progressPercent = Math.round((completedDays / 28) * 100)
+  const goalReached = completedDays === 28
+
+  // Split days into calendar weeks (aligned to weekdays)
   const weeks = []
-  for (let i = 0; i < days.length; i += 7) {
-    weeks.push(days.slice(i, i + 7))
+  const startDow = days[0].getDay() // 0=Dom, 1=Seg, ...
+  // First week: pad with nulls so day lands on the correct column
+  const firstWeek = [...Array(startDow).fill(null), ...days.slice(0, 7 - startDow)]
+  weeks.push(firstWeek)
+  // Remaining days in chunks of 7
+  let idx = 7 - startDow
+  while (idx < days.length) {
+    weeks.push(days.slice(idx, idx + 7))
+    idx += 7
   }
 
-  const endDate = new Date(today)
-  endDate.setDate(today.getDate() + 27) // 4 weeks
-
-  const isInRange = (date) => {
-    const d = new Date(date)
-    d.setHours(0, 0, 0, 0)
-    const start = new Date(today)
-    start.setHours(0, 0, 0, 0)
-    const end = new Date(endDate)
-    end.setHours(0, 0, 0, 0)
-    return d >= start && d <= end
-  }
 
   return (
     <div className="progresso">
@@ -106,29 +110,29 @@ function MeuProgresso({ userId, onBack }) {
 
         {weeks.map((week, wi) => (
           <div key={wi} className="calendar-week">
-            {week.map((date) => {
+            {week.map((date, di) => {
+              if (!date) {
+                return <div key={`empty-${di}`} className="calendar-day empty" />
+              }
               const dateKey = formatDateKey(date)
               const count = getCompletionCount(dateKey)
-              const inRange = isInRange(date)
               const todayClass = isToday(date) ? 'is-today' : ''
-              const outOfRange = !inRange ? 'out-of-range' : ''
-              const completionClass = inRange
-                ? count === 3
-                  ? 'complete'
-                  : count > 0
-                    ? 'partial'
-                    : ''
-                : ''
+              const completionClass = count === 3
+                ? 'complete'
+                : count > 0
+                  ? 'partial'
+                  : ''
 
               return (
                 <button
                   key={dateKey}
-                  className={`calendar-day ${todayClass} ${outOfRange} ${completionClass}`}
-                  onClick={() => inRange && setSelectedDay(selectedDay === dateKey ? null : dateKey)}
-                  disabled={!inRange}
+                  className={`calendar-day ${todayClass} ${completionClass}`}
+                  onClick={() => setSelectedDay(selectedDay === dateKey ? null : dateKey)}
                 >
                   <span className="day-number">{date.getDate()}</span>
-                  {inRange && (
+                  {count === 3 ? (
+                    <span className="day-star">⭐</span>
+                  ) : (
                     <div className="day-dots">
                       {SLOTS.map(slot => (
                         <span
@@ -143,6 +147,43 @@ function MeuProgresso({ userId, onBack }) {
             })}
           </div>
         ))}
+      </div>
+
+      <div className={`countdown-container ${goalReached ? 'goal-reached' : ''}`}>
+        {goalReached ? (
+          <>
+            <div className="countdown-icon gift-open">🎁</div>
+            <h3 className="countdown-title">Parabéns, Maitê! 🎉</h3>
+            <p className="countdown-text">Você completou os 28 dias!</p>
+            <p className="countdown-text">Você ganhou seu presente! 🧚‍♀️✨</p>
+            <div className="confetti">
+              <span>🎊</span><span>⭐</span><span>🦷</span><span>✨</span><span>🎊</span>
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="countdown-icon">{remaining <= 7 ? '🎁' : '🎁'}</div>
+            <h3 className="countdown-title">Contagem para o Presente!</h3>
+            <div className="countdown-progress-bar">
+              <div
+                className="countdown-progress-fill"
+                style={{ width: `${progressPercent}%` }}
+              />
+            </div>
+            <div className="countdown-stats">
+              <span className="countdown-done">⭐ {completedDays}</span>
+              <span className="countdown-separator">/</span>
+              <span className="countdown-total">28 dias</span>
+            </div>
+            <p className="countdown-remaining">
+              {remaining === 1
+                ? 'Falta só 1 dia! 🤩'
+                : remaining <= 7
+                  ? `Faltam apenas ${remaining} dias! Quase lá! 🌟`
+                  : `Faltam ${remaining} dias para ganhar o presente 🎁`}
+            </p>
+          </>
+        )}
       </div>
 
       {selectedDay && (

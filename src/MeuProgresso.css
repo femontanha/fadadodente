@@ -117,10 +117,11 @@
   box-shadow: 0 0 0 2px rgba(138, 92, 191, 0.15);
 }
 
-.calendar-day.out-of-range {
-  background: #f3f0f5;
-  opacity: 0.4;
+.calendar-day.empty {
+  background: transparent;
+  border: none;
   cursor: default;
+  pointer-events: none;
 }
 
 .calendar-day.partial {
@@ -135,6 +136,17 @@
   font-size: 0.85rem;
   font-weight: 600;
   color: var(--text-dark);
+}
+
+.day-star {
+  font-size: 0.85rem;
+  line-height: 1;
+  animation: star-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes star-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
 }
 
 .day-dots {
@@ -152,6 +164,132 @@
 
 .dot-checked {
   background: var(--purple-dark);
+}
+
+/* Countdown / Gift */
+.countdown-container {
+  width: 100%;
+  max-width: 500px;
+  background: var(--white);
+  border-radius: 20px;
+  padding: 1.5rem 1.25rem;
+  box-shadow: 0 4px 20px rgba(138, 92, 191, 0.12);
+  margin-bottom: 1.5rem;
+  text-align: center;
+  animation: slideUp 0.3s ease;
+}
+
+.countdown-container.goal-reached {
+  background: linear-gradient(135deg, #fff7e6 0%, #ffe8f0 50%, #e8f0ff 100%);
+  box-shadow: 0 4px 25px rgba(255, 170, 50, 0.25);
+  border: 2px solid #ffd700;
+}
+
+.countdown-icon {
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+  animation: float 3s ease-in-out infinite;
+}
+
+.countdown-icon.gift-open {
+  font-size: 4rem;
+  animation: gift-bounce 1s ease-in-out infinite;
+}
+
+@keyframes gift-bounce {
+  0%, 100% { transform: translateY(0) scale(1); }
+  25% { transform: translateY(-8px) scale(1.05); }
+  50% { transform: translateY(0) scale(1); }
+  75% { transform: translateY(-4px) scale(1.02); }
+}
+
+.countdown-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--purple-dark);
+  margin-bottom: 0.75rem;
+}
+
+.countdown-progress-bar {
+  width: 100%;
+  height: 16px;
+  background: #ede5f5;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 0.75rem;
+  position: relative;
+}
+
+.countdown-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--purple) 0%, var(--pink) 50%, #ffd700 100%);
+  border-radius: 10px;
+  transition: width 0.6s ease;
+  position: relative;
+}
+
+.countdown-progress-fill::after {
+  content: '✨';
+  position: absolute;
+  right: -2px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.7rem;
+}
+
+.countdown-stats {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  font-family: 'Fredoka', sans-serif;
+  margin-bottom: 0.5rem;
+}
+
+.countdown-done {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--purple-dark);
+}
+
+.countdown-separator {
+  font-size: 1.1rem;
+  color: var(--text-light);
+}
+
+.countdown-total {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--text-light);
+}
+
+.countdown-remaining {
+  font-size: 0.95rem;
+  color: var(--text-dark);
+  font-weight: 500;
+}
+
+.confetti {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+  font-size: 1.5rem;
+}
+
+.confetti span {
+  animation: confetti-fall 2s ease-in-out infinite;
+}
+
+.confetti span:nth-child(1) { animation-delay: 0s; }
+.confetti span:nth-child(2) { animation-delay: 0.3s; }
+.confetti span:nth-child(3) { animation-delay: 0.6s; }
+.confetti span:nth-child(4) { animation-delay: 0.9s; }
+.confetti span:nth-child(5) { animation-delay: 1.2s; }
+
+@keyframes confetti-fall {
+  0%, 100% { transform: translateY(0) rotate(0deg); opacity: 1; }
+  50% { transform: translateY(-12px) rotate(15deg); opacity: 0.7; }
 }
 
 /* Day detail panel */

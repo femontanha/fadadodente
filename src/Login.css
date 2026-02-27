@@ -60,6 +60,38 @@
   font-size: 1.5rem;
 }
 
+/* Form */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.login-input {
+  width: 100%;
+  padding: 0.9rem 1.1rem;
+  border: 2px solid var(--purple-light);
+  border-radius: 14px;
+  background: var(--white);
+  font-family: 'Fredoka', sans-serif;
+  font-size: 1rem;
+  color: var(--text-dark);
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  box-sizing: border-box;
+}
+
+.login-input::placeholder {
+  color: var(--text-light);
+  opacity: 0.6;
+}
+
+.login-input:focus {
+  border-color: var(--purple);
+  box-shadow: 0 0 0 3px rgba(179, 136, 217, 0.15);
+}
+
 .btn-entrar {
   display: inline-flex;
   align-items: center;
