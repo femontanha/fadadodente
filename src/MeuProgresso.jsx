@@ -15,12 +15,15 @@ const MONTHS = [
   'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
 ]
 
-function generateDays(startDate) {
+// Data fixa de início do desafio de 28 dias
+const CHALLENGE_START = new Date(2026, 1, 26) // 26 de fevereiro de 2026
+
+function generateDays() {
   const days = []
-  const start = new Date(startDate)
+  const start = new Date(CHALLENGE_START)
   start.setHours(0, 0, 0, 0)
 
-  // 28 dias a partir de hoje
+  // 28 dias a partir do início do desafio
   for (let i = 0; i < 28; i++) {
     const date = new Date(start)
     date.setDate(start.getDate() + i)
@@ -36,7 +39,7 @@ function formatDateKey(date) {
 
 function MeuProgresso({ userId, onBack }) {
   const today = new Date()
-  const days = generateDays(today)
+  const days = generateDays()
 
   const { checkedSlots, loading } = useProgresso(userId)
 
